@@ -125,7 +125,12 @@ h1{font-size:clamp(2.4rem,6.4vw,4.2rem);line-height:1.03;margin:0;font-weight:40
 .tstep.ok .tk{color:var(--signal)}
 .tstep b{color:var(--ink);font-weight:500}
 @keyframes fade{from{opacity:0;transform:translateY(-3px)}to{opacity:1;transform:none}}
-@media(prefers-reduced-motion:reduce){.tstep{animation:none}}
+.tstep{animation:none}
+.tstep.rev{animation:fade .3s ease}
+.tstep.ghost{color:var(--ink-3)}
+.tstep.ghost .tt,.tstep.ghost .tk{opacity:.35}
+.ph{display:block;height:.72em;margin-top:.16em;background:currentColor;opacity:.14;border-radius:2px}
+@media(prefers-reduced-motion:reduce){.tstep.rev{animation:none}}
 .applies{margin-top:16px;padding-top:14px;font-size:11.5px;color:var(--ink-3);line-height:1.65;max-width:76ch;
   border-top:1px solid var(--rule-2)}
 .applies b{color:var(--signal);font-weight:500;letter-spacing:.05em;text-transform:uppercase;font-size:10.5px}
@@ -631,7 +636,10 @@ function select(i,run){
   $("i-vizcap").textContent=VIZCAP[i];
   $("i-metrics").innerHTML=c.m.map(m=>'<div class="metric"><b>'+m[0]+'</b><span>'+m[1]+'</span></div>').join("");
   $("i-applies").innerHTML='<b>Applies to</b> — '+c.ap;
-  $("i-trace").innerHTML="";$("runstat").textContent="idle · "+c.tr.length+" steps";
+  $("i-trace").innerHTML=c.tr.map((st,k)=>
+    '<div class="tstep ghost"><span class="tt">·····</span><span class="tk">····</span>'+
+    '<span class="ph" style="width:'+(56+((k*37)%40))+'%"></span></div>').join("");
+  $("runstat").textContent="idle · "+c.tr.length+" steps";
   $("runbtn").disabled=false;$("runbtn").textContent="▶ Execute trace";
   if(runTimer){clearTimeout(runTimer);runTimer=null}
   if(autoTimer){clearTimeout(autoTimer);autoTimer=null}
@@ -643,16 +651,20 @@ function select(i,run){
 }
 function execute(){
   const c=CAPS[cur],box=$("i-trace"),btn=$("runbtn");
-  box.innerHTML="";btn.disabled=true;let k=0,t=0;
+  // rebuild the skeleton so a replay starts from full height — no growth, no shift
+  box.innerHTML=c.tr.map((st,k)=>
+    '<div class="tstep ghost"><span class="tt">·····</span><span class="tk">····</span>'+
+    '<span class="ph" style="width:'+(56+((k*37)%40))+'%"></span></div>').join("");
+  const rows=[...box.children];
+  btn.disabled=true;let k=0,t=0;
   $("runstat").textContent="executing…";
   const step=()=>{
     if(k>=c.tr.length){btn.disabled=false;btn.textContent="↻ Replay trace";
       $("runstat").textContent="complete · "+c.tr.length+" steps · "+t.toFixed(1)+"s";runTimer=null;return}
-    const s=c.tr[k];t+=0.3+Math.min(s[1].length,90)/150;
-    const d=document.createElement("div");
-    d.className="tstep"+(s[2]?" ok":"");
+    const s=c.tr[k],d=rows[k];t+=0.3+Math.min(s[1].length,90)/150;
+    d.className="tstep rev"+(s[2]?" ok":"");
     d.innerHTML='<span class="tt">'+t.toFixed(2)+'s</span><span class="tk">'+s[0].toUpperCase()+'</span><span>'+(s[2]?"<b>"+s[1]+"</b>":s[1])+'</span>';
-    box.appendChild(d);k++;runTimer=setTimeout(step,reduce?0:340);
+    k++;runTimer=setTimeout(step,reduce?0:340);
   };step();
 }
 $("runbtn").addEventListener("click",execute);
