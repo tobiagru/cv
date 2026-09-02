@@ -1,0 +1,697 @@
+<title>Grundmann Skills Registry</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=DM+Mono:wght@400;500&display=swap">
+<style>
+/* Palette derived from flexion.ai: bone #f3f2ef ground, warm near-black #2f2625 ink,
+   and the six-stop brand spectrum #179aeb → #d38eec → #ff86c6 → #ffc4bc → #ff793f → #cc6002.
+   Their site is light-only; the dark theme here is my own, built on their aurora base #0e0f12. */
+:root{
+  --ground:#F3F2EF;--surface:#FBFAF8;--surface-2:#EBE8E2;--surface-3:#E2DED6;
+  --ink:#2F2625;--ink-2:#5C524F;--ink-3:#8A807C;
+  --rule:rgba(47,38,37,.14);--rule-2:rgba(47,38,37,.08);
+  --accent:#CC6002;--accent-2:#B064CE;--accent-soft:rgba(255,121,63,.20);--on-accent:#FFFFFF;
+  --signal:#0F6FA8;--bar-off:rgba(47,38,37,.13);
+  --spectrum:linear-gradient(90deg,#179aeb,#d38eec,#ff86c6,#ffc4bc,#ff793f,#cc6002);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --ground:#0E0F12;--surface:#16181C;--surface-2:#1C1F24;--surface-3:#24272D;
+  --ink:#EDEAE6;--ink-2:#B2AAA6;--ink-3:#867E7B;
+  --rule:rgba(237,234,230,.14);--rule-2:rgba(237,234,230,.07);
+  --accent:#FF793F;--accent-2:#D38EEC;--accent-soft:rgba(255,121,63,.22);--on-accent:#12100F;
+  --signal:#5AB6F0;--bar-off:rgba(237,234,230,.14);
+  --spectrum:linear-gradient(90deg,#179aeb,#d38eec,#ff86c6,#ffc4bc,#ff793f,#cc6002);
+}}
+:root[data-theme="dark"]{
+  --ground:#0E0F12;--surface:#16181C;--surface-2:#1C1F24;--surface-3:#24272D;
+  --ink:#EDEAE6;--ink-2:#B2AAA6;--ink-3:#867E7B;
+  --rule:rgba(237,234,230,.14);--rule-2:rgba(237,234,230,.07);
+  --accent:#FF793F;--accent-2:#D38EEC;--accent-soft:rgba(255,121,63,.22);--on-accent:#12100F;
+  --signal:#5AB6F0;--bar-off:rgba(237,234,230,.14);
+  --spectrum:linear-gradient(90deg,#179aeb,#d38eec,#ff86c6,#ffc4bc,#ff793f,#cc6002);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);
+  font-family:Archivo,"Helvetica Neue",Arial,sans-serif;font-size:16.5px;line-height:1.58;
+  letter-spacing:-.001em;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px 90px}
+h1,h2,h3,h4{font-family:Archivo,"Helvetica Neue",Arial,sans-serif;text-wrap:balance;font-weight:500}
+/* keyword texture swap — Flexion's signature device, executed with a substitute face */
+.kw{font-family:"Bricolage Grotesque",Archivo,sans-serif;font-weight:500}
+.mn,.eyebrow,.contact,.hint,.reglist-h,.rid,.lvl,.cid,.insp-meta,.vizwrap figcaption,
+.metric span,.runbtn,.runstat,.tstep,.applies,.role-when,blockquote cite,.plain .meta,
+.award,.skillrow dt,footer,.sechead .num,.sechead .note,.evalsum span,.evalnote,
+.evaltable th,.eid,.ecap a,.vd{font-family:"DM Mono",ui-monospace,Menlo,monospace}
+
+.mast{padding:52px 0 0}
+.mast .rule{height:3px;background:var(--spectrum);margin-top:26px;border-radius:2px}
+.eyebrow{font-size:11.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--accent);margin-bottom:20px}
+h1{font-size:clamp(2.4rem,6.4vw,4.2rem);line-height:1.03;margin:0;font-weight:400;letter-spacing:-.022em}
+.role{font-size:clamp(.98rem,2vw,1.2rem);color:var(--ink-2);margin:14px 0 0;letter-spacing:-.01em;font-weight:400}
+.role em{color:var(--accent);font-style:normal}
+.contact{display:flex;flex-wrap:wrap;gap:8px 22px;margin-top:22px;font-size:12.5px;color:var(--ink-3)}
+.contact a{color:var(--ink-2);text-decoration:none}
+.contact a::after{content:" /";color:var(--ink-3)}
+.contact a:hover,.contact a:focus-visible{color:var(--accent)}
+
+.thesis{padding:34px 0 6px;max-width:70ch}
+.thesis p{margin:0 0 15px;color:var(--ink-2)}
+.thesis p:first-child{font-size:18.5px;color:var(--ink)}
+.thesis strong{font-weight:500;color:var(--ink);box-shadow:inset 0 -.4em 0 var(--accent-soft)}
+.thesis em{font-style:italic}
+
+.sec{margin-top:58px}
+.sechead{display:flex;align-items:baseline;gap:15px;padding-bottom:9px;position:relative}
+.sechead::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--spectrum);opacity:.75;border-radius:1px}
+.sechead h2{font-size:1.3rem;font-weight:500;margin:0;letter-spacing:-.018em}
+.sechead .num{font-size:11.5px;color:var(--accent);letter-spacing:.06em}
+.sechead .note{margin-left:auto;font-size:11.5px;color:var(--ink-3)}
+
+.hint{font-size:11.5px;color:var(--ink-3);margin:14px 0 16px}
+.hint kbd{background:var(--surface-3);border-radius:4px;padding:1.5px 6px;font-size:10.5px;color:var(--ink-2)}
+.console{display:grid;grid-template-columns:minmax(0,1fr);gap:14px;align-items:start}
+@media(min-width:940px){.console{grid-template-columns:334px minmax(0,1fr)}}
+
+.reglist{background:var(--surface);padding:6px;border-radius:4px}
+.reglist-h{font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3);padding:10px 10px 11px}
+.regitem{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:none;border:0;
+  padding:9px 11px;cursor:pointer;color:var(--ink-2);font-family:Archivo,sans-serif;font-size:13.6px;
+  font-weight:400;letter-spacing:-.008em;line-height:1.32;border-radius:4px}
+.regitem:hover{background:var(--surface-2);color:var(--ink)}
+.regitem[aria-selected="true"]{background:var(--surface-3);color:var(--ink);font-weight:500}
+.regitem .rid{font-size:10.5px;color:var(--ink-3)}
+.regitem[aria-selected="true"] .rid{color:var(--accent)}
+.regitem .rn{flex:1 1 auto;min-width:0}
+.bars{display:flex;gap:2.5px;flex:0 0 auto}
+.bars i{display:block;width:11px;height:6px;background:var(--bar-off);border-radius:1px}
+.bars i.on{background:var(--spectrum);background-size:44px 6px}
+.bars i.on:nth-child(1){background-position:0 0}.bars i.on:nth-child(2){background-position:-13px 0}
+.bars i.on:nth-child(3){background-position:-26px 0}.bars i.on:nth-child(4){background-position:-39px 0}
+.lv1 .bars i.on{background:var(--accent)}
+.regitem:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+
+.inspector{background:var(--surface);min-height:520px;display:flex;flex-direction:column;border-radius:4px;overflow:hidden}
+.insp-bar{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;padding:13px 20px;background:var(--surface-2)}
+.insp-bar .cid{font-size:11.5px;color:var(--accent);letter-spacing:.05em}
+.insp-bar .lvl{font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3)}
+.insp-bar .spacer{flex:1 1 auto}
+.insp-body{padding:22px 22px 20px}
+.insp-body h3{font-size:1.44rem;font-weight:500;margin:0 0 4px;letter-spacing:-.02em}
+.insp-meta{font-size:11.5px;color:var(--ink-3);margin-bottom:15px}
+.insp-body>p{margin:0 0 18px;color:var(--ink-2);max-width:70ch;font-size:16.2px}
+.insp-body>p strong{color:var(--ink);font-weight:500}
+
+.vizwrap{margin:0 0 20px;background:var(--surface-2);border-radius:4px;overflow:hidden}
+.vizwrap canvas{display:block;width:100%;height:168px}
+.vizwrap figcaption{font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);padding:9px 14px}
+
+.metrics{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:20px}
+.metric{background:var(--surface-2);padding:10px 14px;min-width:112px;border-radius:4px}
+.metric b{display:block;font-size:1.14rem;font-weight:600;letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:1.2}
+.metric span{font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
+
+.runbar{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-bottom:14px}
+.runbtn{font-size:11px;letter-spacing:.1em;text-transform:uppercase;background:var(--accent);color:var(--on-accent);
+  border:0;padding:10px 17px;cursor:pointer;font-weight:500;border-radius:4px}
+.runbtn:hover{filter:brightness(1.08)}
+.runbtn:disabled{opacity:.45;cursor:default}
+.runbtn:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.runstat{font-size:11px;color:var(--ink-3)}
+.tracebox{background:var(--surface-2);padding:5px 0;min-height:70px;border-radius:4px}
+.tstep{display:grid;grid-template-columns:62px 78px minmax(0,1fr);gap:12px;padding:6px 16px;font-size:12px;
+  line-height:1.55;color:var(--ink-2);animation:fade .34s ease backwards}
+.tstep .tt{color:var(--ink-3);font-variant-numeric:tabular-nums}
+.tstep .tk{color:var(--accent);letter-spacing:.04em;font-size:10.5px;padding-top:1.5px}
+.tstep.ok .tk{color:var(--signal)}
+.tstep b{color:var(--ink);font-weight:500}
+@keyframes fade{from{opacity:0;transform:translateY(-3px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.tstep{animation:none}}
+.applies{margin-top:16px;padding-top:14px;font-size:11.5px;color:var(--ink-3);line-height:1.65;max-width:76ch;
+  border-top:1px solid var(--rule-2)}
+.applies b{color:var(--signal);font-weight:500;letter-spacing:.05em;text-transform:uppercase;font-size:10.5px}
+
+.evalsum{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0 6px}
+.evalsum div{background:var(--surface);padding:11px 16px;min-width:96px;border-radius:4px}
+.evalsum b{display:block;font-size:1.36rem;font-weight:600;letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:1.15}
+.evalsum span{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+.evalsum .p b{color:var(--signal)}.evalsum .q b{color:var(--accent)}.evalsum .g b{color:var(--ink-2)}
+.evalnote{font-size:11.5px;color:var(--ink-3);line-height:1.75;margin:14px 0 20px;padding-left:14px;max-width:76ch;
+  border-left:2px solid var(--accent)}
+.evalscroll{overflow-x:auto;background:var(--surface);border-radius:4px}
+.evaltable{width:100%;border-collapse:collapse;font-size:14.8px}
+.evaltable th{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);text-align:left;
+  font-weight:400;padding:12px 14px;white-space:nowrap;background:var(--surface-2)}
+.evaltable td{padding:11px 14px;color:var(--ink-2);vertical-align:top;border-top:1px solid var(--rule-2)}
+.evaltable .eid{font-size:11px;color:var(--ink-3);white-space:nowrap}
+.evaltable .ereq{color:var(--ink);font-weight:500;min-width:20ch}
+.evaltable .eev{font-size:14.4px;min-width:28ch}
+.evaltable .ecap a{font-size:10.5px;color:var(--accent);text-decoration:none;white-space:nowrap}
+.evaltable .ecap a:hover,.evaltable .ecap a:focus-visible{text-decoration:underline}
+.vd{font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding:3px 9px;white-space:nowrap;border-radius:3px}
+.vd.pass{color:var(--on-accent);background:var(--signal)}
+.vd.partial{color:var(--on-accent);background:var(--accent)}
+.vd.gap{color:var(--ink-2);background:var(--surface-3)}
+
+.role-row{display:grid;grid-template-columns:minmax(0,1fr);gap:4px 32px;padding:21px 0;border-top:1px solid var(--rule-2)}
+@media(min-width:820px){.role-row{grid-template-columns:180px minmax(0,1fr)}}
+.role-when{font-size:11.5px;color:var(--ink-3);line-height:1.65;padding-top:5px}
+.role-when b{display:block;color:var(--ink-2);font-weight:500}
+.role-what h3{font-size:1.08rem;font-weight:500;margin:0 0 2px;letter-spacing:-.012em}
+.role-what .org{font-size:.93rem;color:var(--accent);font-weight:400;margin:0 0 8px}
+.role-what p{margin:0 0 8px;color:var(--ink-2);max-width:74ch;font-size:16px}
+.role-what strong{color:var(--ink);font-weight:500}
+blockquote{margin:14px 0 0;padding:14px 18px;background:var(--surface);font-size:15.6px;color:var(--ink-2);
+  font-style:italic;max-width:74ch;border-radius:4px;border-left:2px solid var(--accent)}
+blockquote cite{display:block;margin-top:8px;font-size:11px;font-style:normal;color:var(--ink-3)}
+.cols{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;margin-top:20px}
+@media(min-width:760px){.cols{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.card{background:var(--surface);padding:19px 21px;border-radius:4px}
+.card h3{font-size:1rem;font-weight:500;margin:0 0 6px;letter-spacing:-.01em}
+.card h3 a{color:inherit;text-decoration:none;border-bottom:1px solid var(--accent)}
+.card h3 a:hover,.card h3 a:focus-visible{color:var(--accent)}
+.card p{margin:0;font-size:15.4px;color:var(--ink-2)}
+.subhead{font-family:"DM Mono",ui-monospace,Menlo,monospace;font-size:10px;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--accent);font-weight:400;margin:26px 0 2px}
+.sec>.subhead:first-of-type{margin-top:20px}
+.flist{margin:0;padding:0;list-style:none}
+.fitem{display:grid;grid-template-columns:minmax(0,1fr);gap:2px 22px;padding:11px 0;border-top:1px solid var(--rule-2)}
+@media(min-width:640px){.fitem{grid-template-columns:104px minmax(0,1fr)}}
+.fitem .yr{font-family:"DM Mono",ui-monospace,Menlo,monospace;font-size:11px;color:var(--ink-3);
+  padding-top:3px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.fitem b{color:var(--ink);font-weight:500}
+.fitem .meta{font-family:"DM Mono",ui-monospace,Menlo,monospace;font-size:11.5px;color:var(--ink-3);line-height:1.6}
+.flist.edu .fitem{font-size:15.8px;color:var(--ink-2)}
+.flist.sm .fitem{font-size:14.2px;color:var(--ink-2);padding:8px 0}
+.flist.sm .fitem b{font-weight:500}
+.flist.sm .fitem .meta{font-size:11px}
+.plain{margin:18px 0 0;padding:0;list-style:none}
+.plain li{padding:11px 0;border-top:1px solid var(--rule-2);color:var(--ink-2);max-width:82ch;font-size:16px}
+.plain li:first-child{border-top:0}
+.plain b{color:var(--ink);font-weight:500}
+.plain .meta{font-size:11.5px;color:var(--ink-3)}
+.award{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--on-accent);background:var(--accent);
+  padding:2px 7px;margin-left:6px;white-space:nowrap;border-radius:3px}
+.skillrow{display:grid;grid-template-columns:minmax(0,1fr);gap:3px 26px;padding:14px 0;border-top:1px solid var(--rule-2)}
+@media(min-width:760px){.skillrow{grid-template-columns:130px minmax(0,1fr)}}
+.skillrow:first-of-type{border-top:0}
+.skillrow dt{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);padding-top:4px}
+.skillrow dd{margin:0;color:var(--ink-2);font-size:15.6px}
+.skillrow dd .meta{font-family:"DM Mono",ui-monospace,Menlo,monospace;font-size:11.5px;color:var(--ink-3);line-height:1.6;display:inline-block;margin-top:5px}
+footer{margin-top:58px;padding-top:20px;font-size:11.5px;color:var(--ink-3);display:flex;flex-wrap:wrap;gap:8px 26px;
+  border-top:2px solid var(--rule)}
+a:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+@media print{
+  body{background:#fff;color:#000;font-size:10.4pt}.wrap{max-width:none;padding:0}
+  .console{grid-template-columns:1fr}.inspector{min-height:0}.runbar,.hint,.vizwrap{display:none}
+  .card,.role-row{break-inside:avoid}
+}
+</style>
+
+<div class="wrap">
+<header class="mast">
+  <div class="eyebrow">/000 &nbsp;Skills Registry &nbsp;·&nbsp; compiled for Flexion Robotics &nbsp;·&nbsp; Zürich</div>
+  <h1>Tobias<br>Grundmann</h1>
+  <p class="role">Product Manager, AI &amp; Developer Platforms — <em>a product person who <span class="kw">ships</span> code</em></p>
+  <div class="contact">
+    <span>Zürich, Switzerland</span><span>+41 78 778 05 40</span>
+    <a href="mailto:tbs.grndmnn@gmail.com">tbs.grndmnn@gmail.com</a>
+    <a href="https://www.linkedin.com/in/tobias-grundmann-43a27111a/">LinkedIn</a>
+    <a href="https://github.com/tobiagru">GitHub</a>
+  </div>
+  <div class="rule"></div>
+</header>
+
+<section class="thesis">
+  <p>I build the <span class="kw">platforms</span> other builders stand on, and my motivation is watching them succeed — teams shipping value they could not have shipped without the thing underneath them. For six years that has meant developer platforms at scale: the framework, build infrastructure, observability and runtime core behind Switzerland's largest online retailer, carrying <strong>50+ teams</strong> through millions to <strong>billions of requests a month</strong> and a rollout from two markets to eight — while making it one of the <strong>three fastest large-scale shops in Europe</strong>, from 2,500ms down to 1,000ms.</p>
+  <p>For the past eighteen months that platform has gone into AI end to end: the AI skill registry, the agentic frontend development stack, an agentic design IDE, and the evaluation harness that decides what is real. My thesis is that <strong>software delivery is becoming a framework concern</strong> — the leverage is no longer in writing code, but in defining the skills, the data loops and the interfaces through which <span class="kw">autonomous</span> systems do the work, and proving they did it correctly.</p>
+  <p><span class="kw">Measurement</span> runs through all of it. I own experimentation, observability and user-behaviour monitoring; I build the KPI trees; I write the analytics code myself. For a period I drove <em>how the organisation measures success</em> — not what counts as winning, but how we would know.</p>
+  <p>The domains are ones this job cares about, and I have been on their floors. Across Galaxus, Celonis and HYVE I have worked in warehouses, production halls and manufacturing plants — building <strong>computer vision systems for Lidl warehouses</strong> and logistics systems at Celonis — on client projects with <strong>Dell, Lidl, Adidas, BMW, Mercedes, ZF, Wagner and Witron</strong>.</p>
+  <p>That is the software half. The other half started in robotics and computer vision at ETH and never fully stopped — I still build hardware on the side. This role is the one where both halves count for the same job.</p>
+</section>
+
+<section class="sec">
+  <div class="sechead"><span class="num">/001</span><h2>Skills Registry</h2><span class="note">10 skills · levelled by evidence</span></div>
+  <p class="hint">Select a skill to inspect it · <kbd>↑</kbd> <kbd>↓</kbd> to move · each trace runs itself · <kbd>Enter</kbd> to replay · levels: <b>L4</b> owned in production · <b>L3</b> proven at scale · <b>L2</b> shipped · <b>L1</b> grounding only</p>
+  <div class="console">
+    <div class="reglist" role="listbox" aria-label="Skills registry" id="reglist" tabindex="0">
+      <div class="reglist-h">Registry · 10 skills</div>
+    </div>
+    <div class="inspector">
+      <div class="insp-bar">
+        <span class="cid" id="i-id">SKL-01</span>
+        <span class="bars" id="i-bars"></span>
+        <span class="lvl" id="i-lvl">L4 · owned</span>
+        <span class="spacer"></span>
+        <span class="lvl" id="i-org">—</span>
+      </div>
+      <div class="insp-body">
+        <h3 id="i-name">—</h3>
+        <div class="insp-meta" id="i-meta">—</div>
+        <figure class="vizwrap"><canvas id="i-viz" aria-hidden="true"></canvas><figcaption id="i-vizcap">—</figcaption></figure>
+        <p id="i-sum">—</p>
+        <div class="metrics" id="i-metrics"></div>
+        <div class="runbar">
+          <button class="runbtn" id="runbtn">▶ Execute trace</button>
+          <span class="runstat" id="runstat">idle</span>
+        </div>
+        <div class="tracebox" id="i-trace"></div>
+        <div class="applies" id="i-applies"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec">
+  <div class="sechead"><span class="num">/002</span><h2>Eval Suite</h2><span class="note">evaluation set: the posting, verbatim</span></div>
+  <div class="evalsum">
+    <div class="p"><b id="ev-p">0</b><span>pass</span></div>
+    <div class="q"><b id="ev-q">0</b><span>partial</span></div>
+    <div class="g"><b id="ev-g">0</b><span>gap</span></div>
+    <div><b id="ev-t">0</b><span>test cases</span></div>
+  </div>
+  <p class="evalnote">Every requirement in the posting — quoted as written, not paraphrased — scored against the registry. This is a self-assessment, not a third-party result — so the only thing that makes it worth reading is that it is allowed to fail. Three partials and one gap are stated deliberately. An eval suite that returns all-pass is not an eval suite, it is a brochure.</p>
+  <div class="evalscroll"><table class="evaltable"><thead><tr>
+    <th>Test</th><th>Requirement</th><th>Verdict</th><th>Covered by</th><th>Evidence</th>
+  </tr></thead><tbody id="evalbody"></tbody></table></div>
+</section>
+
+<section class="sec">
+  <div class="sechead"><span class="num">/003</span><h2>Deployment History</h2><span class="note">2016 — present</span></div>
+  <div class="role-row"><div class="role-when"><b>Aug 2022 — present</b>Digitec Galaxus AG<br>Zürich</div><div class="role-what">
+    <h3>Senior Product Manager</h3><p class="org">Shop Framework &amp; Developer Tools</p>
+    <p>Switzerland's largest online retailer. Returned to a wider remit and was promoted to Senior in Jul 2024. Initiatives spanning <strong>10+ software teams</strong>, from discovery through MVP definition to delivery. Evidence under SKL-01 to SKL-07.</p>
+    <blockquote>An outstanding ability to develop people, to activate their capabilities and turn them into visible results… he communicates appropriately with people at every level.<cite>Digitec Galaxus Zwischenzeugnis, November 2024 · translated from German</cite></blockquote></div></div>
+  <div class="role-row"><div class="role-when"><b>Dec 2021 — Jul 2022</b>Celonis<br>Zürich</div><div class="role-what">
+    <h3>Senior Product Manager</h3><p class="org">Celonis Labs</p>
+    <p>Moonshot products and co-innovation projects run directly with enterprise customers, including <strong>logistics systems</strong> built with and for them. Managed strategic innovation initiatives <strong>with multiple executive stakeholders</strong>; used user and market research to identify and validate the problem areas steering Celonis's product and business innovation; wrote the requirement documents and designed the user experiences; hired into the product and design function. On-site discovery through to validated concept, in a company that sells hard — where an idea has to survive contact with a paying customer in the quarter it was conceived.</p>
+    <blockquote>He possesses excellent in-depth specialist knowledge even in peripheral fields … Due to his very good perception, he was always able to understand complex situations immediately and to find very good solutions straight away. The performance of Mr Grundmann always earned our full recognition in every respect.<cite>Celonis Reference Letter, July 2022 · original English</cite></blockquote></div></div>
+  <div class="role-row"><div class="role-when"><b>Apr 2020 — Dec 2021</b>Self-employed<br>part-time</div><div class="role-what">
+    <h3>Product &amp; Startup Consulting</h3><p class="org">Alongside the Galaxus role</p>
+    <p>Product strategy, design and hands-on development for early-stage startups.</p></div></div>
+  <div class="role-row"><div class="role-when"><b>Jun 2020 — Nov 2021</b>Digitec Galaxus AG<br>Zürich</div><div class="role-what">
+    <h3>Product Manager</h3><p class="org">Cloud Platform &amp; Database Engineering</p>
+    <p>The first stint, and where the platform ownership began: <strong>build infrastructure, the observability solution, shared software libraries and database services</strong>. New products from idea to rollout, a target vision and roadmap for the existing ones, and research with internal customers — workshops, interviews, surveys, measurement — to find out what engineering actually needed. Prioritised the larger initiatives together with the Head of Product, CTO and Lead Architect, and helped recruit engineers and product owners into a brand-new team.</p>
+    <p>I left for Celonis, and came back nine months later to a bigger remit.</p>
+    <blockquote>He regularly exceeded the requirements of the role, and we were exceptionally satisfied with his performance … he cultivated and used his extensive network intensively and with great success to get difficult undertakings done. Managers, colleagues and customers alike recognised and greatly valued him.<cite>Digitec Galaxus Arbeitszeugnis, November 2021 · translated from German</cite></blockquote></div></div>
+  <div class="role-row"><div class="role-when"><b>Oct 2019 — Mar 2020</b>holo|one<br>Switzerland</div><div class="role-what">
+    <h3>VP Engineering</h3><p class="org">Enterprise AR platform</p>
+    <p>Led product development of an enterprise AR platform and its backend. Lead architect for the backend services and a scalability-oriented Azure cloud architecture; program and multi-project management for standardised and customer-specific integrations, including SAP and M2M protocols. Full-stack development in Python, JavaScript, CSS and HTML.</p>
+    <blockquote>His strong technical competence and deep understanding of people meant he was always able to explain any problem, and its solution, competently and understandably to any audience.<cite>holo|one Arbeitszeugnis, March 2020 · translated from German</cite></blockquote></div></div>
+  <div class="role-row"><div class="role-when"><b>May 2017 — Sep 2019</b>HYVE<br>Munich</div><div class="role-what">
+    <h3>Innovation Consultant, Digital &amp; AI Products</h3><p class="org">Where I learned the product discipline properly · intern → Associate Innovation Consultant → Innovation Consultant, Jul 2019</p>
+    <p>Research, experimentation, positioning, roadmap and delivery, end to end. Led product and development teams building <strong>AI, smart-product and digital products</strong> for clients — <strong>on site with customers</strong>, from ideation to MVP via design thinking, rapid prototyping and lean startup. Hands-on software and data science in Python for <strong>computer vision and NLP</strong> — including vision systems deployed in <strong>Lidl warehouses</strong>. Facilitated workshops and innovation labs up to executive level, and carried <strong>sales responsibility</strong> — client acquisition, proposals and pricing.</p>
+    <blockquote>His outstanding entrepreneurial and strategic thinking, together with his excellent expertise, earned him the highest respect of the management and of his colleagues.<cite>HYVE Arbeitszeugnis, September 2019 · translated from German</cite></blockquote></div></div>
+  <div class="role-row"><div class="role-when"><b>Feb 2017 — Apr 2018</b>cofoundme.org<br>Zürich</div><div class="role-what">
+    <h3>Co-founder &amp; CDO</h3><p class="org">Talent matching platform</p>
+    <p>Product strategy and design to <strong>15,000 users and 2,000 member companies</strong>. Tech lead for backend and analytics; built a job search engine and recommendation system.</p></div></div>
+  <div class="role-row"><div class="role-when"><b>May — Dec 2016</b>Swiss Re<br>Zürich</div><div class="role-what">
+    <h3>Product Management Intern</h3><p class="org">Liability Centre, Casualty Underwriting</p>
+    <p>Led <strong>Project LIGHT</strong>, an interactive knowledge platform built in collaboration with <strong>IBM</strong> to apply their cognitive and AI computing to liability reinsurance risk — identifying the emerging drivers affecting Swiss Re's underwriting decisions and building the platform to surface them.</p></div></div>
+
+  <div class="role-row"><div class="role-when"><b>Jun — Sep 2015</b>Ditting Maschinen AG<br>Bachenbülach</div><div class="role-what">
+    <h3>Assistant to Management</h3><p class="org">Machine manufacturer, Hemro Group · my first shop floor</p>
+    <p>Operational controlling across <strong>two manufacturing sites</strong>; designed and built the management cockpit. Introduced a <strong>monthly supplier performance index</strong> and the group-wide reporting behind it; supplier and inventory management, warehouse structure evaluation and capacity planning. Extended the SAP R/3 system across SD, MM, FI and PP.</p></div></div>
+</section>
+
+<section class="sec">
+  <div class="sechead"><span class="num">/004</span><h2>Built on the Side</h2><span class="note">nights and weekends</span></div>
+  <div class="cols">
+    <div class="card"><h3><a href="https://github.com/ambrovia/agent-skills-pipeline">agent-skills-pipeline</a></h3><p>Open-source multi-agent development pipeline: interview → agree the shape → build → review → ship. Human approval gates, per-repo rule injection, 16+ composable skills across Claude Code, Cursor, Codex, Copilot and Gemini. A working opinion on how agent capabilities should be defined, scoped, reviewed and shipped.</p></div>
+    <div class="card"><h3><a href="https://nimmly.com/">Nimmly</a></h3><p>AI platform for SME succession in the DACH market: registry signal discovery, AI-generated company dossiers, buyer matching with fit scores. Closed alpha.</p></div>
+    <div class="card"><h3>Ambrovia &amp; Hyperidle</h3><p>AI workspace tooling, concept through to working product. Two swings at what an agent-native workspace should feel like.</p></div>
+    <div class="card"><h3>Embedded &amp; PCB</h3><p>Custom hardware for speakers and room correction: board design, DSP, measurement and correction. Where the robotics half of my brain has been living.</p></div>
+  </div>
+</section>
+
+<section class="sec">
+  <div class="sechead"><span class="num">/005</span><h2>Foundation</h2><span class="note">education · publications · community</span></div>
+
+  <h4 class="subhead">Education</h4>
+  <ul class="flist edu">
+    <li class="fitem"><span class="yr">2015 — 2019</span><span><b>MSc Management, Technology &amp; Economics</b> — ETH Zürich<br><span class="meta">Machine learning, computer vision, spatial computing; innovation and entrepreneurship</span></span></li>
+    <li class="fitem"><span class="yr">2011 — 2015</span><span><b>BSc Mechanical Engineering</b> — ETH Zürich<br><span class="meta">Mechatronics, robotics, computer vision</span></span></li>
+    <li class="fitem"><span class="yr">2019</span><span><b>RLab Accelerator New York</b> — XR &amp; Spatial Computing cohort</span></li>
+    <li class="fitem"><span class="yr">2014</span><span><b>Mechatronic Engineering</b> — UNSW Sydney, exchange semester</span></li>
+  </ul>
+
+  <h4 class="subhead">Publications</h4>
+  <ul class="flist sm">
+    <li class="fitem"><span class="yr">2019</span><span><b>Towards Identification of Packaged Products via Computer Vision</b><span class="award">Best Paper</span><br><span class="meta">CNNs for object detection and image classification in retail environments · Fuchs, Grundmann, Fleisch</span></span></li>
+    <li class="fitem"><span class="yr">2019</span><span><b>Impact of Mixed Reality Food Labels on Product Selection</b><br><span class="meta">Headset-mediated food labels at a vending machine · Fuchs, Grundmann, Haldimann, Fleisch</span></span></li>
+    <li class="fitem"><span class="yr">2020</span><span><b>Supporting Food Choices in the Internet of People</b><br><span class="meta">Diet-related activity detection and real-time intervention via mixed reality headsets · Fuchs, Haldimann, Grundmann, Fleisch</span></span></li>
+  </ul>
+
+  <h4 class="subhead">Standards &amp; community</h4>
+  <ul class="flist sm">
+    <li class="fitem"><span class="yr">ongoing</span><span><b>W3C Real User Monitoring Community Group</b> — participant<br><span class="meta">Feedback on how real-world system behaviour gets measured in the field</span></span></li>
+    <li class="fitem"><span class="yr">2018 — 2019</span><span><b>German AI Association</b> — founding member<br><span class="meta">Building the Munich AI ecosystem</span></span></li>
+    <li class="fitem"><span class="yr">2017 — 2018</span><span><b>Founder Institute</b> — Operations Manager<br><span class="meta">Coaching first-time founders</span></span></li>
+  </ul>
+</section>
+
+<section class="sec">
+  <div class="sechead"><span class="num">/006</span><h2>Toolkit</h2></div>
+  <dl style="margin:18px 0 0">
+    <div class="skillrow"><dt>Product</dt><dd>User research and discovery · business requirements and requirements engineering · roadmap, prioritisation and program planning across many consuming teams · delivery at 20+ team scale · platform and developer-experience strategy · API, SDK and interface design · UI design and design systems · evaluation and benchmark design · KPIs for non-deterministic systems · deciding what belongs in the framework versus the application</dd></div>
+    <div class="skillrow"><dt>AI / ML</dt><dd>LLM agents and tool use · agent skill design and registries · eval harnesses, task suites, regression tracking · autonomous long-horizon agent pipelines · prompt and context engineering.<br><span class="meta">Earlier practice, not current: classical ML and computer vision — CNNs, object detection, PyTorch, TensorFlow, OpenCV.</span></dd></div>
+    <div class="skillrow"><dt>Systems</dt><dd>Kubernetes, Docker, Helm, Terraform · observability with Datadog, Grafana, OpenTelemetry · build infrastructure and CI/CD · event streaming with Kafka and Pub/Sub · Azure, GCP, AWS</dd></div>
+    <div class="skillrow"><dt>Code</dt><dd>Python, C#, C++, TypeScript, Go, SQL · Unity · embedded C and PCB design</dd></div>
+    <div class="skillrow"><dt>Languages</dt><dd>German (native) · English (fluent) · French (basic)</dd></div>
+  </dl>
+</section>
+
+<footer><span>German national, resident in Zürich</span><span>Happy to travel</span><span>tbs.grndmnn@gmail.com · +41 78 778 05 40</span></footer>
+</div>
+
+<script>
+const CAPS=[
+{id:"SKL-01",n:"Developer platform ownership",lv:4,lvn:"owned",org:"Digitec Galaxus",per:"2020 — present",
+ sum:"I own the <strong>developer framework and the productive core of the shop</strong> — the platform every product team ships on. Roadmap set directly with the CTO, Head of Product and Lead Architect. I designed the product and team structure of the framework itself, mapping customer promises, KPIs and ownership onto platform components, and established developer experience as a discipline at the company along with its open-source program.",
+ m:[["50+","teams on the platform"],["3","product groups"],["L4","owned today"]],
+ tr:[["observe","Framework serves 10+ product teams; ownership diffuse, priorities set by volume of requests"],["decompose","Map customer promises, KPIs and ownership onto discrete platform components"],["act","Define the product and team structure of the shop framework"],["act","Establish developer experience as a discipline; stand up the open-source program"],["verify","Investment now prioritised by value and reuse, not by who asks loudest",1]],
+ ap:"Deciding what belongs in an autonomy stack versus an individual deployment — and making a shared platform something teams choose rather than tolerate."},
+{id:"SKL-02",n:"Measurement, experimentation & evaluation",lv:4,lvn:"owned",org:"Digitec Galaxus",per:"2020 — present",
+ sum:"I own experimentation and user-behaviour monitoring, and for a period I owned the definition of what success <em>means</em> for the product organisation. I build the KPI trees connecting platform work to outcomes the business recognises — and I write my own analytics code, so I do not wait for a dashboard to tell me whether something worked.",
+ m:[["30–40","experiments run"],["4 yrs","measured outcomes"],["3","full KPI sets"]],
+ tr:[["observe","\"Success\" undefined and inconsistent across product groups"],["act","Build full KPI sets for three product groups"],["act","Maintain KPI trees linking platform work to recognised business outcomes"],["act","Write the analytics instrumentation directly rather than commissioning it"],["run","30–40 experiments with measured business outcomes, at 20+ team scale"],["verify","Detect instrumentation drift before it corrupts a decision",1]],
+ ap:"Evaluation sets, and deciding what \"the robot got better\" is allowed to mean before anyone claims it."},
+{id:"SKL-03",n:"Agentic AI systems & skill registries",lv:4,lvn:"owned",org:"Digitec Galaxus",per:"2025 — present",
+ sum:"Brought the <strong>AI skill registry</strong> into existence: the governed catalogue of what AI skills exist, who owns them, what they are approved for and how they are measured. Built and maintain the <strong>agentic frontend development stack</strong> in production; currently building an <strong>agentic design IDE</strong>.",
+ m:[["18 mo","in the AI stack"],["1","skill registry"],["0","humans in the loop"]],
+ tr:[["observe","AI skills proliferating across the org — ungoverned, unmeasured, undiscoverable"],["act","Create the AI skill registry: owner, approval scope, measurement per skill"],["ship","Agentic frontend development stack, in production"],["experiment","\"Dark AI factory\" — lights-out, long-horizon agent runs with no human in the loop"],["finding","Autonomy holds further than expected, then degrades silently — the failure is invisible without instrumentation"],["act","Instrument the degradation so the difference is visible before it ships",1],["next","Agentic design IDE; then full validation, software → product engineering"]],
+ ap:"A modular skill library and the factory that fills it; long-horizon autonomy, and the honest question of when a capability is ready to leave the lab without a tele-op farm behind it."},
+{id:"SKL-04",n:"Complex, highly distributed systems",lv:4,lvn:"owned",org:"Digitec Galaxus",per:"2020 — present",
+ sum:"I own the <strong>build infrastructure and observability solution</strong> for a highly distributed production system — and the interfaces through which engineers deploy, monitor, diagnose and control it at runtime. The hard part is rarely the screen; it is reasoning about failure across services that only misbehave together. Participant in the <strong>W3C Real User Monitoring Community Group</strong>, contributing feedback on how real-world system behaviour gets measured in the field.",
+ m:[["4","runtime surfaces"],["W3C","RUM participant"],["24/7","production"]],
+ tr:[["observe","A highly distributed production system: engineers must deploy, monitor, diagnose and control it — four jobs, one surface"],["act","Own build infrastructure and the observability solution end to end"],["act","Design for diagnosis under pressure, not for the demo"],["external","W3C Real User Monitoring Community Group — field measurement standards",1]],
+ ap:"Monitoring, observability, diagnostics and runtime control for fleets of deployed robots."},
+{id:"SKL-05",n:"Scale & performance engineering",lv:4,lvn:"owned",org:"Digitec Galaxus",per:"2020 — present",
+ sum:"Cut Largest Contentful Paint from <strong>over 2,500ms to roughly 1,000ms</strong> on digitec.ch and galaxus.ch — real-user field data from the Chrome UX Report. From well behind the field to <strong>top 3 fastest of Europe's 100 largest online shops</strong>. I set the vision, the targets and the metrics.",
+ m:[["1,000ms","LCP, from 2,500+"],["Top 3","in Europe's top 100"],["Billions","requests / month"]],
+ tr:[["baseline","LCP above 2,500ms at p75, CrUX field data — well behind the field"],["act","Set the vision, the performance targets and the metrics that count"],["execute","Coordinated delivery across 10+ software teams"],["result","LCP ≈ 1,000ms — top 3 fastest of Europe's 100 largest online shops",1],["scale","Millions → billions of requests per month"],["expand","2 → 8 countries; my team owned deployment, scaling and the domains",1]],
+ ap:"Latency budgets as a product constraint rather than an engineering afterthought."},
+{id:"SKL-06",n:"Team building & product coaching",lv:4,lvn:"owned",org:"Digitec Galaxus",per:"2020 — present",
+ sum:"Twice I have grown an engineering team to double size and <strong>split it into two functioning teams</strong>. I hold 10+ year engineers who could work anywhere — by giving them a problem worth staying for, not by managing them harder. I coach senior product managers through strategic initiatives with direct C-level exposure.",
+ m:[["2×","team doubled, twice"],["10+ yrs","engineers retained"],["C-level","coaching exposure"]],
+ tr:[["act","Grow the engineering team to double size, then split it into two functioning teams"],["repeat","Second time, same play, different domain"],["retain","Hold 10+ year engineers with problem quality rather than process"],["coach","Senior product managers through strategic initiatives with C-level exposure"],["observed","Managers describe the result as \"a product flywheel of overdelivery and bigger goals\"",1]],
+ ap:"The first product hire's real job: making a research-heavy organisation legible to customers, and customers legible to research."},
+{id:"SKL-07",n:"Commercial judgment",lv:3,lvn:"proven at scale",org:"Galaxus · Celonis · own startups",per:"2016 — present",
+ sum:"Ran classic e-commerce product development alongside the platform work: experiments and rollouts that moved <strong>tens to hundreds of millions in annual revenue</strong> — including the ones that burned it, because an experiment whose downside you cannot measure is not an experiment. Brokered and structured <strong>multi-million technology vendor agreements</strong>.",
+ m:[["100s M","annual revenue moved"],["Multi-M","vendor deals brokered"],["3","startups of my own"]],
+ tr:[["run","E-commerce experiments and rollouts at national scale"],["outcome","Tens to hundreds of millions in annual revenue moved"],["honest","Including the experiments that burned it — downside measured, not hidden",1],["negotiate","Multi-million technology vendor agreements, through to the build-versus-buy call"],["school","Celonis sales discipline; three startups of my own"]],
+ ap:"Prioritising capabilities by value and applicability across customer use cases — and knowing what a deployment is actually worth."},
+{id:"SKL-08",n:"Industry & domain range",lv:3,lvn:"proven at scale",org:"Galaxus · Celonis · HYVE",per:"2016 — present",
+ sum:"Production sites, manufacturing, warehousing, logistics and supply chain — the domains where humanoids actually get deployed, and ones I have worked in rather than read about. <strong>Computer vision systems in Lidl warehouses. Logistics systems at Celonis.</strong> Projects on production and manufacturing floors, on site, repeatedly. Client and co-innovation work with <strong>Dell, Lidl, Adidas, BMW, Mercedes, ZF, Wagner and Witron</strong>. The skill is not knowing one industry — it is hearing the same problem in eight of them and judging which version of it belongs in the platform.",
+ m:[["8","named enterprise clients"],["5","industrial domains"],["Vision","systems in warehouses"]],
+ tr:[["observe","Every industry states its problem in its own vocabulary, and insists the problem is unique"],["floor","On site in warehouses, production halls and manufacturing plants — repeatedly, not once"],["build","Computer vision systems deployed in Lidl warehouses; logistics systems built at Celonis"],["clients","Dell, Lidl, Adidas, BMW, Mercedes, ZF, Wagner, Witron — through Galaxus, Celonis and HYVE"],["abstract","Separate what is genuinely specific from the same problem wearing different clothes"],["decide","One reusable skill beats eight bespoke ones — but only if the abstraction survives contact with all eight",1]],
+ ap:"Understanding customer use cases across industries to identify reusable skills — the second responsibility in the posting, and the one that decides what the skill library actually contains."},
+{id:"SKL-09",n:"Robotics, perception & spatial computing",lv:2,lvn:"shipped",org:"ETH · UNSW · holo|one",per:"2011 — 2020, ongoing on the side",
+ sum:"Mechatronics and robotics at <strong>ETH Zürich</strong> and <strong>UNSW Sydney</strong>; computer vision through to publication, including a <strong>best-paper award</strong> for CNN-based object detection in retail environments. VP Engineering for an enterprise AR platform. Still building hardware on the side: custom PCBs, DSP and room correction for speakers.",
+ m:[["3","publications"],["1","best paper award"],["PCB","still soldering"]],
+ tr:[["study","BSc Mechanical Engineering, ETH Zürich — mechatronics, robotics, computer vision"],["study","UNSW Sydney exchange; then MSc with ML, CV and spatial computing focus"],["publish","CNNs for object detection in retail environments — Best Paper Award",1],["ship","Enterprise AR platform and backend, as VP Engineering"],["ongoing","Custom PCBs, DSP, room correction — latency and sensors, still by hand"]],
+ ap:"Speaking the team's first language — and the reason this is a return rather than a career change."},
+{id:"SKL-10",n:"Reinforcement learning",lv:1,lvn:"grounding only",org:"ETH Zürich",per:"studied, not shipped",
+ sum:"Studied and implemented during my time at ETH. <strong>Grounding rather than recent practice:</strong> I reason fluently about how these systems learn and fail, but I have not built them in production or at scale. Listed at its honest level, because a registry that overstates one entry cannot be trusted on the other eight.",
+ m:[["L1","declared honestly"],["0","production systems"],["—","large-scale exposure"]],
+ tr:[["study","Reinforcement learning at ETH — studied and implemented"],["status","Reasoning fluent: how these systems learn, and how they fail"],["limit","No production build. No large-scale system exposure. Stated plainly."],["declare","Listed at L1 so the other eight entries mean something",1]],
+ ap:"Knowing the boundary of my own judgment — and exactly where I would defer to Research."}
+];
+
+const VIZCAP=["Platform layer carrying 10+ product teams","Experiment distribution converging on a measured effect","Long-horizon task decomposition, executing","Four runtime channels — deploy · monitor · diagnose · control","LCP distribution shifting: 2,500ms → 1,000ms","One team grown to 2×, then split into two","Cumulative value, drawdowns included","Eight client domains converging on the reusable few","Two-link planar arm under inverse kinematics","Partially explored policy — unconverged, and labelled so"];
+const EVALS=[
+{i:"EV-01",r:"Own the product roadmap for the AI platform — capabilities, data infrastructure, interfaces",v:"pass",c:"SKL-01",e:"Owns the developer framework, build infrastructure, data services and observability core today"},
+{i:"EV-02",r:"Understand end-customer use cases across industries and identify common needs",v:"pass",c:"SKL-08",e:"On-site in warehouses and plants; vision systems in Lidl warehouses, logistics systems at Celonis"},
+{i:"EV-03",r:"Define and prioritise the robot skills and capabilities to support, based on value",v:"pass",c:"SKL-03",e:"Created the AI skill registry; published an open-source agent skill framework"},
+{i:"EV-04",r:"Define data workflows to train, evaluate and continuously improve models",v:"partial",c:"SKL-02",e:"Evaluation and continuous-improvement loops owned end to end. Training pipelines are not recent practice"},
+{i:"EV-05",r:"Define interfaces to operate robots: monitoring, observability, diagnostics, runtime controls",v:"pass",c:"SKL-04",e:"The exact surface owned at Galaxus — and the one this page is built as"},
+{i:"EV-06",r:"Work with Research and AI Engineering to translate capabilities into reusable product features",v:"pass",c:"SKL-01",e:"Turns 50+ teams' needs into shared framework primitives; three peer-reviewed publications"},
+{i:"EV-07",r:"Spend meaningful time with customers, including on-site visits",v:"pass",c:"SKL-08",e:"On-site discovery at HYVE, Celonis and in client warehouses and production halls"},
+{i:"EV-08",r:"PM experience: AI/ML, robotics, data platforms, developer platforms or complex B2B products",v:"pass",c:"SKL-01",e:"All five, across Galaxus, Celonis and HYVE — though robotics is the oldest of them"},
+{i:"EV-09",r:"Strong product judgment identifying common needs across diverse customer use cases",v:"pass",c:"SKL-08",e:"Eight named enterprise clients across five industrial domains; one platform, not eight bespoke builds"},
+{i:"EV-10",r:"Strong technical foundation: model training, evaluation and deployment",v:"partial",c:"SKL-02",e:"Evaluation and deployment: owned. Training: grounding from ETH, not current practice"},
+{i:"EV-11",r:"Experience defining user-facing interfaces for complex technical systems",v:"pass",c:"SKL-04",e:"Build infrastructure and observability for a highly distributed production system"},
+{i:"EV-12",r:"Excellent written and verbal communication",v:"pass",c:"SKL-06",e:"Four reference letters say it independently — database engines to C-level in the same week"},
+{i:"EV-13",r:"Comfortable in an early-stage, fast-moving environment",v:"pass",c:"SKL-07",e:"Co-founder, VP Engineering at a startup, Celonis Labs, three products of my own"},
+{i:"EV-14",r:"Willingness to travel to customer sites across Europe and beyond, up to 10%",v:"pass",c:"SKL-08",e:"Yes — and already the way I have worked at HYVE and Celonis"},
+{i:"EV-15",r:"Bonus: robotics, autonomous systems, or products deployed in physical environments",v:"pass",c:"SKL-09",e:"Vision systems deployed in Lidl warehouses; ETH robotics and a shipped AR platform"},
+{i:"EV-16",r:"Bonus: reinforcement learning or imitation learning",v:"gap",c:"SKL-10",e:"Grounding only, and none of it recent. No production build, no large-scale exposure"},
+{i:"EV-17",r:"Bonus: foundation models for robotics",v:"partial",c:"SKL-03",e:"Eighteen months building on frontier models in production — but not in a robotics context"}
+];
+
+const $=id=>document.getElementById(id);
+const list=$("reglist");let cur=0,runTimer=null,rafId=null,t0=0,seen=false,autoTimer=null;
+const reduce=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const css=n=>getComputedStyle(document.body).getPropertyValue(n).trim();
+
+CAPS.forEach((c,i)=>{
+  const b=document.createElement("button");
+  b.className="regitem"+(c.lv===1?" lv1":"");b.type="button";b.setAttribute("role","option");
+  b.setAttribute("aria-selected",i===0?"true":"false");b.dataset.i=i;
+  b.innerHTML='<span class="rid">'+c.id.split("-")[1]+'</span><span class="rn">'+c.n+'</span><span class="bars">'+
+    [1,2,3,4].map(k=>'<i class="'+(k<=c.lv?"on":"")+'"></i>').join("")+'</span>';
+  b.addEventListener("click",()=>select(i));
+  list.appendChild(b);
+});
+
+const cv=$("i-viz"),cx=cv.getContext("2d");let W=0,H=0;
+function sizeCanvas(){
+  const r=cv.getBoundingClientRect(),d=Math.min(window.devicePixelRatio||1,2);
+  if(!r.width)return;
+  W=r.width;H=r.height;cv.width=Math.round(W*d);cv.height=Math.round(H*d);
+  cx.setTransform(d,0,0,d,0,0);
+}
+window.addEventListener("resize",sizeCanvas);
+function grid(g,col){
+  g.strokeStyle=col;g.globalAlpha=.30;g.lineWidth=1;
+  for(let y=H*.2;y<H;y+=H*.2){g.beginPath();g.moveTo(0,y);g.lineTo(W,y);g.stroke()}
+  g.globalAlpha=1;
+}
+const VIZ=[
+(g,t,A,S,M,R)=>{ /* platform carrying teams */
+  grid(g,R);const base=H*.74;
+  g.fillStyle=A;g.fillRect(W*.06,base,W*.88,7);
+  for(let i=0;i<11;i++){
+    const x=W*.08+i*(W*.84/11),bob=Math.sin(t*1.4+i*.7)*4,bh=26+((i*37)%5)*9;
+    g.fillStyle=S;g.globalAlpha=.85;g.fillRect(x,base-bh+bob,W*.84/11-7,bh);g.globalAlpha=1;
+    g.strokeStyle=R;g.beginPath();g.moveTo(x+2,base);g.lineTo(x+2,base-bh+bob);g.stroke();
+  }},
+(g,t,A,S,M,R)=>{ /* experiment distribution converging */
+  grid(g,R);const n=27,mid=W/2,settle=Math.min(1,(t%7)/2.4);
+  for(let i=0;i<n;i++){
+    const x=W*.08+i*(W*.84/n),u=(i-n/2)/(n/6),hgt=Math.exp(-u*u/2)*H*.52*settle;
+    g.fillStyle=S;g.globalAlpha=.55+.4*Math.exp(-u*u/2);
+    g.fillRect(x,H*.78-hgt,W*.84/n-3,hgt);g.globalAlpha=1;
+  }
+  const ci=(1-settle*.72)*W*.24;
+  g.strokeStyle=A;g.lineWidth=2;g.beginPath();
+  g.moveTo(mid-ci,H*.86);g.lineTo(mid+ci,H*.86);
+  g.moveTo(mid-ci,H*.82);g.lineTo(mid-ci,H*.90);
+  g.moveTo(mid+ci,H*.82);g.lineTo(mid+ci,H*.90);g.stroke();
+  g.setLineDash([3,3]);g.beginPath();g.moveTo(mid,H*.12);g.lineTo(mid,H*.80);g.stroke();g.setLineDash([]);},
+(g,t,A,S,M,R)=>{ /* long-horizon task tree */
+  const cols=5,rows=3,ph=(t*1.05)%(cols+1.6);
+  for(let c=0;c<cols;c++)for(let r=0;r<rows;r++){
+    if((c*7+r*3)%4===3&&c>0)continue;
+    const x=W*.12+c*(W*.76/(cols-1)),y=H*.24+r*(H*.52/(rows-1));
+    if(c<cols-1){
+      g.strokeStyle=R;g.lineWidth=1;g.globalAlpha=.8;
+      for(let r2=0;r2<rows;r2++){
+        if(((c+1)*7+r2*3)%4===3)continue;
+        const x2=W*.12+(c+1)*(W*.76/(cols-1)),y2=H*.24+r2*(H*.52/(rows-1));
+        if(Math.abs(r2-r)<2){g.beginPath();g.moveTo(x,y);g.lineTo(x2,y2);g.stroke()}
+      }g.globalAlpha=1;
+    }
+    const done=ph>c+.5,act=Math.abs(ph-(c+.5))<.5;
+    g.fillStyle=done?S:(act?A:R);
+    g.beginPath();g.arc(x,y,act?7:5,0,7);g.fill();
+    if(act){g.strokeStyle=A;g.globalAlpha=.4;g.lineWidth=2;g.beginPath();g.arc(x,y,7+((t*22)%14),0,7);g.stroke();g.globalAlpha=1}
+  }},
+(g,t,A,S,M,R)=>{ /* four runtime channels, one anomaly */
+  const lanes=4;
+  for(let l=0;l<lanes;l++){
+    const yc=H*.18+l*(H*.64/(lanes-1));
+    g.strokeStyle=R;g.globalAlpha=.5;g.beginPath();g.moveTo(0,yc);g.lineTo(W,yc);g.stroke();g.globalAlpha=1;
+    g.strokeStyle=(l===2)?A:S;g.lineWidth=1.7;g.beginPath();
+    for(let x=0;x<W;x++){
+      const u=x/W*9+t*(.8+l*.22);
+      let y=yc+Math.sin(u*1.9+l)*7+Math.sin(u*5.1+l*2)*3.4;
+      if(l===2){const d=x/W-((t*.19)%1.4-.2);y+=Math.exp(-d*d*420)*-24}
+      x?g.lineTo(x,y):g.moveTo(x,y);
+    }g.stroke();
+  }},
+(g,t,A,S,M,R)=>{ /* latency distribution shift */
+  grid(g,R);const k=(Math.sin(t*.7)*.5+.5);
+  const draw=(mu,sd,col,al,fill)=>{
+    g.beginPath();
+    for(let x=0;x<=W;x++){const u=(x/W-mu)/sd;g[x?"lineTo":"moveTo"](x,H*.80-Math.exp(-u*u/2)*H*.58)}
+    g.globalAlpha=al;
+    if(fill){g.lineTo(W,H*.80);g.lineTo(0,H*.80);g.closePath();g.fillStyle=col;g.fill()}
+    else{g.strokeStyle=col;g.lineWidth=2;g.stroke()}
+    g.globalAlpha=1;};
+  draw(.74,.15,M,.16,true);draw(.74,.15,M,.5,false);
+  draw(.74-(.74-.24)*k,.15-.07*k,S,.24,true);
+  draw(.74-(.74-.24)*k,.15-.07*k,A,1,false);
+  g.fillStyle=M;g.font='10px "JetBrains Mono",monospace';
+  g.fillText("2,500ms",W*.70,H*.94);g.fillText("1,000ms",W*.17,H*.94);},
+(g,t,A,S,M,R)=>{ /* team grows then splits */
+  const n=14,ph=(t*.42)%3,sp=ph<1?0:(ph<2?(ph-1):1),pts=[];
+  for(let i=0;i<n;i++){
+    const a=i/n*Math.PI*2,side=i%2?1:-1,rr=H*.22+((i*13)%5)*3;
+    pts.push([W/2+side*sp*W*.20+Math.cos(a)*rr*.9,H*.5+Math.sin(a)*rr*.62+Math.sin(t*1.3+i)*2,side]);
+  }
+  g.strokeStyle=R;g.lineWidth=1;g.globalAlpha=.55;
+  pts.forEach((p,i)=>pts.forEach((q,j)=>{if(j>i&&p[2]===q[2]){g.beginPath();g.moveTo(p[0],p[1]);g.lineTo(q[0],q[1]);g.stroke()}}));
+  g.globalAlpha=1;
+  pts.forEach(p=>{g.fillStyle=sp>.5?(p[2]>0?A:S):S;g.beginPath();g.arc(p[0],p[1],4.4,0,7);g.fill()});},
+(g,t,A,S,M,R)=>{ /* cumulative value with drawdowns */
+  grid(g,R);const pr=(t*.19)%1.35,seed=[0,.09,.2,.16,.3,.42,.34,.5,.63,.58,.72,.85,.79,.93,1];
+  const P=x=>{const f=x*(seed.length-1),i=Math.floor(f),k=f-i;
+    return seed[Math.min(i,seed.length-1)]*(1-k)+seed[Math.min(i+1,seed.length-1)]*k};
+  const lim=Math.min(1,pr);
+  g.beginPath();g.moveTo(0,H*.88);
+  for(let x=0;x<=W*lim;x++)g.lineTo(x,H*.88-P(x/W)*H*.68);
+  g.lineTo(W*lim,H*.88);g.closePath();g.fillStyle=S;g.globalAlpha=.16;g.fill();g.globalAlpha=1;
+  g.beginPath();
+  for(let x=0;x<=W*lim;x++){const y=H*.88-P(x/W)*H*.68;x?g.lineTo(x,y):g.moveTo(x,y)}
+  g.strokeStyle=S;g.lineWidth=2.2;g.stroke();
+  [.22,.47,.72].forEach(d=>{if(lim>d){g.fillStyle=A;g.globalAlpha=.85;g.beginPath();g.arc(W*d,H*.88-P(d)*H*.68,4,0,7);g.fill();g.globalAlpha=1}});
+  if(lim<1){g.fillStyle=A;g.beginPath();g.arc(W*lim,H*.88-P(lim)*H*.68,4.6,0,7);g.fill()}},
+(g,t,A,S,M,R)=>{ /* many client domains converging on few reusable skills */
+  const N=8,K=3,lx=W*.16,rx=W*.80;
+  for(let i=0;i<N;i++){
+    const y=H*.14+i*(H*.72/(N-1)),k=i%K,ry=H*.28+k*(H*.44/(K-1));
+    g.strokeStyle=R;g.globalAlpha=.7;g.lineWidth=1;
+    g.beginPath();g.moveTo(lx,y);g.bezierCurveTo(W*.45,y,W*.52,ry,rx,ry);g.stroke();g.globalAlpha=1;
+    const ph=(t*.42+i*.13)%1;
+    const bx=(1-ph)*(1-ph)*(1-ph)*lx+3*(1-ph)*(1-ph)*ph*W*.45+3*(1-ph)*ph*ph*W*.52+ph*ph*ph*rx;
+    const by=(1-ph)*(1-ph)*(1-ph)*y+3*(1-ph)*(1-ph)*ph*y+3*(1-ph)*ph*ph*ry+ph*ph*ph*ry;
+    g.fillStyle=A;g.globalAlpha=.85;g.beginPath();g.arc(bx,by,2.6,0,7);g.fill();g.globalAlpha=1;
+    g.fillStyle=M;g.beginPath();g.arc(lx,y,3.4,0,7);g.fill();
+  }
+  for(let k=0;k<K;k++){
+    const ry=H*.28+k*(H*.44/(K-1));
+    g.fillStyle=S;g.beginPath();g.arc(rx,ry,6.5,0,7);g.fill();
+  }
+  g.fillStyle=M;g.font='10px "DM Mono",monospace';
+  g.fillText("8 domains",lx-14,H*.05);g.fillText("3 reusable",rx-24,H*.05);},
+(g,t,A,S,M,R)=>{ /* two-link planar arm, IK */
+  const ox=W*.5,oy=H*.86,l1=H*.42,l2=H*.34;
+  const tx=ox+Math.cos(t*.55)*W*.30,ty=oy-H*.46-Math.sin(t*.9)*H*.20;
+  const dx=tx-ox,dy=ty-oy,d=Math.min(Math.hypot(dx,dy),l1+l2-1);
+  const a2=Math.acos(Math.max(-1,Math.min(1,(d*d-l1*l1-l2*l2)/(2*l1*l2))));
+  const a1=Math.atan2(dy,dx)-Math.atan2(l2*Math.sin(a2),l1+l2*Math.cos(a2));
+  const jx=ox+Math.cos(a1)*l1,jy=oy+Math.sin(a1)*l1;
+  const ex=jx+Math.cos(a1+a2)*l2,ey=jy+Math.sin(a1+a2)*l2;
+  g.strokeStyle=R;g.lineWidth=1;g.setLineDash([3,4]);g.beginPath();g.arc(ox,oy,l1+l2,Math.PI,0);g.stroke();g.setLineDash([]);
+  g.strokeStyle=S;g.lineWidth=5;g.lineCap="round";
+  g.beginPath();g.moveTo(ox,oy);g.lineTo(jx,jy);g.lineTo(ex,ey);g.stroke();g.lineCap="butt";
+  [[ox,oy,6],[jx,jy,5]].forEach(p=>{g.fillStyle=M;g.beginPath();g.arc(p[0],p[1],p[2],0,7);g.fill()});
+  g.fillStyle=A;g.beginPath();g.arc(ex,ey,5.4,0,7);g.fill();
+  g.strokeStyle=A;g.globalAlpha=.5;g.lineWidth=1.4;g.beginPath();g.arc(tx,ty,9,0,7);g.stroke();g.globalAlpha=1;},
+(g,t,A,S,M,R)=>{ /* unconverged gridworld policy */
+  const C=11,Rw=4,cw=W*.86/C,ch=H*.62/Rw,x0=W*.07,y0=H*.17;
+  const known=(c,r)=>((c*5+r*3)%7)<4;
+  for(let c=0;c<C;c++)for(let r=0;r<Rw;r++){
+    const x=x0+c*cw,y=y0+r*ch;
+    g.strokeStyle=R;g.lineWidth=1;g.globalAlpha=.55;g.strokeRect(x,y,cw-2,ch-2);g.globalAlpha=1;
+    if(known(c,r)){
+      const dir=((c*3+r*5)%4)*Math.PI/2,mx=x+cw/2-1,my=y+ch/2-1,L=Math.min(cw,ch)*.24;
+      g.strokeStyle=S;g.globalAlpha=.75;g.lineWidth=1.6;g.beginPath();
+      g.moveTo(mx-Math.cos(dir)*L,my-Math.sin(dir)*L);g.lineTo(mx+Math.cos(dir)*L,my+Math.sin(dir)*L);g.stroke();g.globalAlpha=1;
+    }else{g.fillStyle=R;g.globalAlpha=.22;g.fillRect(x,y,cw-2,ch-2);g.globalAlpha=1}
+  }
+  const step=Math.floor(t*1.6),ac=step%C,ar=Math.floor(step/C)%Rw;
+  g.fillStyle=A;g.beginPath();g.arc(x0+ac*cw+cw/2-1,y0+ar*ch+ch/2-1,5,0,7);g.fill();
+  g.fillStyle=M;g.font='10px "JetBrains Mono",monospace';
+  g.fillText("explored 57%  ·  policy incomplete",x0,H*.94);}
+];
+function paintOnce(t){
+  if(!W)sizeCanvas();
+  if(!W)return;
+  cx.clearRect(0,0,W,H);
+  VIZ[cur](cx,t,css("--accent"),css("--signal"),css("--ink-3"),css("--rule"));
+}
+function loop(ts){
+  if(!t0)t0=ts;
+  paintOnce((ts-t0)/1000);
+  rafId=requestAnimationFrame(loop);
+}
+
+function select(i,run){
+  cur=i;const c=CAPS[i];
+  [...list.querySelectorAll(".regitem")].forEach((el,k)=>el.setAttribute("aria-selected",k===i?"true":"false"));
+  $("i-id").textContent=c.id;
+  $("i-lvl").textContent="L"+c.lv+" · "+c.lvn;
+  $("i-org").textContent=c.org;
+  $("i-bars").className="bars"+(c.lv===1?" lv1":"");
+  $("i-bars").innerHTML=[1,2,3,4].map(k=>'<i class="'+(k<=c.lv?"on":"")+'"></i>').join("");
+  $("i-name").textContent=c.n;
+  $("i-meta").textContent=c.per;
+  $("i-sum").innerHTML=c.sum;
+  $("i-vizcap").textContent=VIZCAP[i];
+  $("i-metrics").innerHTML=c.m.map(m=>'<div class="metric"><b>'+m[0]+'</b><span>'+m[1]+'</span></div>').join("");
+  $("i-applies").innerHTML='<b>Applies to</b> — '+c.ap;
+  $("i-trace").innerHTML="";$("runstat").textContent="idle · "+c.tr.length+" steps";
+  $("runbtn").disabled=false;$("runbtn").textContent="▶ Execute trace";
+  if(runTimer){clearTimeout(runTimer);runTimer=null}
+  if(autoTimer){clearTimeout(autoTimer);autoTimer=null}
+  history.replaceState(null,"","#"+c.id.toLowerCase());
+  sizeCanvas();
+  if(reduce)paintOnce(2.2);
+  // auto-run once the console has been on screen; debounced so fast arrow-key scrubbing does not stack runs
+  if(run||seen)autoTimer=setTimeout(execute,260);
+}
+function execute(){
+  const c=CAPS[cur],box=$("i-trace"),btn=$("runbtn");
+  box.innerHTML="";btn.disabled=true;let k=0,t=0;
+  $("runstat").textContent="executing…";
+  const step=()=>{
+    if(k>=c.tr.length){btn.disabled=false;btn.textContent="↻ Replay trace";
+      $("runstat").textContent="complete · "+c.tr.length+" steps · "+t.toFixed(1)+"s";runTimer=null;return}
+    const s=c.tr[k];t+=0.3+Math.min(s[1].length,90)/150;
+    const d=document.createElement("div");
+    d.className="tstep"+(s[2]?" ok":"");
+    d.innerHTML='<span class="tt">'+t.toFixed(2)+'s</span><span class="tk">'+s[0].toUpperCase()+'</span><span>'+(s[2]?"<b>"+s[1]+"</b>":s[1])+'</span>';
+    box.appendChild(d);k++;runTimer=setTimeout(step,reduce?0:340);
+  };step();
+}
+$("runbtn").addEventListener("click",execute);
+list.addEventListener("keydown",e=>{
+  if(e.key==="ArrowDown"||e.key==="ArrowRight"){e.preventDefault();select((cur+1)%CAPS.length)}
+  else if(e.key==="ArrowUp"||e.key==="ArrowLeft"){e.preventDefault();select((cur-1+CAPS.length)%CAPS.length)}
+  else if(e.key==="Enter"||e.key===" "){e.preventDefault();execute()}
+});
+
+const tb=$("evalbody");
+EVALS.forEach(e=>{
+  const tr=document.createElement("tr");
+  tr.innerHTML='<td class="eid">'+e.i+'</td><td class="ereq">'+e.r+'</td>'+
+    '<td><span class="vd '+e.v+'">'+e.v+'</span></td>'+
+    '<td class="ecap"><a href="#'+e.c.toLowerCase()+'">'+e.c+'</a></td>'+
+    '<td class="eev">'+e.e+'</td>';
+  tb.appendChild(tr);
+});
+$("ev-p").textContent=EVALS.filter(e=>e.v==="pass").length;
+$("ev-q").textContent=EVALS.filter(e=>e.v==="partial").length;
+$("ev-g").textContent=EVALS.filter(e=>e.v==="gap").length;
+$("ev-t").textContent=EVALS.length;
+tb.addEventListener("click",ev=>{
+  const a=ev.target.closest("a");if(!a)return;
+  const k=CAPS.findIndex(c=>c.id===a.textContent.trim());
+  if(k>=0){ev.preventDefault();select(k);document.querySelector(".console").scrollIntoView({behavior:reduce?"auto":"smooth",block:"center"})}
+});
+
+const hash=(location.hash||"").replace("#","").toUpperCase();
+const idx=CAPS.findIndex(c=>c.id===hash);
+select(idx>=0?idx:0);
+
+const conEl=document.querySelector(".console");
+if(window.IntersectionObserver){
+  const io=new IntersectionObserver(es=>{
+    es.forEach(e=>{if(e.isIntersecting&&!seen){seen=true;io.disconnect();execute()}});
+  },{threshold:.25});
+  io.observe(conEl);
+}else{seen=true;execute()}
+if(reduce){paintOnce(2.2)}else{requestAnimationFrame(loop)}
+
+</script>
