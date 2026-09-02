@@ -117,7 +117,7 @@ h1{font-size:clamp(2.4rem,6.4vw,4.2rem);line-height:1.03;margin:0;font-weight:40
 .runbtn:disabled{opacity:.45;cursor:default}
 .runbtn:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
 .runstat{font-size:11px;color:var(--ink-3)}
-.tracebox{background:var(--surface-2);padding:5px 0;min-height:70px;border-radius:4px}
+.tracebox{background:var(--surface-2);padding:5px 0;height:284px;overflow-y:auto;position:relative;border-radius:4px;scrollbar-width:thin}
 .tstep{display:grid;grid-template-columns:62px 78px minmax(0,1fr);gap:12px;padding:6px 16px;font-size:12px;
   line-height:1.55;color:var(--ink-2);animation:fade .34s ease backwards}
 .tstep .tt{color:var(--ink-3);font-variant-numeric:tabular-nums}
@@ -639,6 +639,7 @@ function select(i,run){
   $("i-trace").innerHTML=c.tr.map((st,k)=>
     '<div class="tstep ghost"><span class="tt">·····</span><span class="tk">····</span>'+
     '<span class="ph" style="width:'+(56+((k*37)%40))+'%"></span></div>').join("");
+  $("i-trace").scrollTop=0;
   $("runstat").textContent="idle · "+c.tr.length+" steps";
   $("runbtn").disabled=false;$("runbtn").textContent="▶ Execute trace";
   if(runTimer){clearTimeout(runTimer);runTimer=null}
@@ -664,6 +665,8 @@ function execute(){
     const s=c.tr[k],d=rows[k];t+=0.3+Math.min(s[1].length,90)/150;
     d.className="tstep rev"+(s[2]?" ok":"");
     d.innerHTML='<span class="tt">'+t.toFixed(2)+'s</span><span class="tk">'+s[0].toUpperCase()+'</span><span>'+(s[2]?"<b>"+s[1]+"</b>":s[1])+'</span>';
+    const need=d.offsetTop+d.offsetHeight-box.clientHeight;
+    if(need>box.scrollTop)box.scrollTop=need;
     k++;runTimer=setTimeout(step,reduce?0:340);
   };step();
 }
