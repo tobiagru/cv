@@ -274,7 +274,7 @@ a:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
     <div class="g"><b id="ev-g">0</b><span>gap</span></div>
     <div><b id="ev-t">0</b><span>test cases</span></div>
   </div>
-  <p class="evalnote">Every requirement in the posting — quoted as written, not paraphrased — scored against the registry. This is a self-assessment, not a third-party result — so the only thing that makes it worth reading is that it is allowed to fail. Three partials and one gap are stated deliberately. An eval suite that returns all-pass is not an eval suite, it is a brochure.</p>
+  <p class="evalnote">Every requirement in the posting — quoted as written, not paraphrased — scored against the registry. This is a self-assessment, not a third-party result — so the only thing that makes it worth reading is that it is allowed to fail. Four partials are stated deliberately. An eval suite that returns all-pass is not an eval suite, it is a brochure.</p>
   <div class="evalscroll"><table class="evaltable"><thead><tr>
     <th>Test</th><th>Requirement</th><th>Verdict</th><th>Covered by</th><th>Evidence</th>
   </tr></thead><tbody id="evalbody"></tbody></table></div>
@@ -415,14 +415,14 @@ const CAPS=[
  m:[["3","publications"],["1","best paper award"],["PCB","still soldering"]],
  tr:[["study","BSc Mechanical Engineering, ETH Zürich — mechatronics, robotics, computer vision"],["study","UNSW Sydney exchange; then MSc with ML, CV and spatial computing focus"],["publish","CNNs for object detection in retail environments — Best Paper Award",1],["ship","Enterprise AR platform and backend, as VP Engineering"],["ongoing","Custom PCBs, DSP, room correction — latency and sensors, still by hand"]],
  ap:"Speaking the team's first language — and the reason this is a return rather than a career change."},
-{id:"SKL-10",n:"Reinforcement learning",lv:1,lvn:"grounding only",org:"ETH Zürich",per:"studied, not shipped",
- sum:"Studied and implemented during my time at ETH. <strong>Grounding rather than recent practice:</strong> I reason fluently about how these systems learn and fail, but I have not built them in production or at scale. Listed at its honest level, because a registry that overstates one entry cannot be trusted on the other eight.",
- m:[["L1","declared honestly"],["0","production systems"],["—","large-scale exposure"]],
- tr:[["study","Reinforcement learning at ETH — studied and implemented"],["status","Reasoning fluent: how these systems learn, and how they fail"],["limit","No production build. No large-scale system exposure. Stated plainly."],["declare","Listed at L1 so the other eight entries mean something",1]],
+{id:"SKL-10",n:"Reinforcement learning",lv:2,lvn:"built, not at scale",org:"ETH Zürich · own projects",per:"2015 — ongoing",
+ sum:"Studied at ETH, and I have built small reinforcement learning systems since, plus work with <strong>world models</strong>. I reason fluently about how these systems learn and how they fail. What I have <strong>not</strong> done is large-scale distributed RL in production. Listed at its honest level, because a registry that overstates one entry cannot be trusted on the other nine.",
+ m:[["L2","built, not at scale"],["Small","systems built"],["0","distributed RL in production"]],
+ tr:[["study","Reinforcement learning at ETH — studied and implemented"],["build","Small RL systems built since; hands-on work with world models"],["status","Reasoning fluent: how these systems learn, and how they fail"],["limit","Not done: large-scale distributed RL in production. Stated plainly."],["declare","Levelled honestly so the other nine entries mean something",1]],
  ap:"Knowing the boundary of my own judgment — and exactly where I would defer to Research."}
 ];
 
-const VIZCAP=["Platform layer carrying 10+ product teams","Experiment distribution converging on a measured effect","Long-horizon task decomposition, executing","Four runtime channels — deploy · monitor · diagnose · control","LCP distribution shifting: 2,500ms → 1,000ms","One team grown to 2×, then split into two","Cumulative value, drawdowns included","Eight client domains converging on the reusable few","Two-link planar arm under inverse kinematics","Partially explored policy — unconverged, and labelled so"];
+const VIZCAP=["Platform layer carrying 10+ product teams","Experiment distribution converging on a measured effect","Long-horizon task decomposition, executing","Four runtime channels — deploy · monitor · diagnose · control","LCP distribution shifting: 2,500ms → 1,000ms","One team grown to 2×, then split into two","Cumulative value, drawdowns included","Eight client domains converging on the reusable few","Two-link planar arm under inverse kinematics","A small gridworld policy, converged — not distributed training"];
 const EVALS=[
 {i:"EV-01",r:"Own the product roadmap for the AI platform — capabilities, data infrastructure, interfaces",v:"pass",c:"SKL-01",e:"Owns the developer framework, build infrastructure, data services and observability core today"},
 {i:"EV-02",r:"Understand end-customer use cases across industries and identify common needs",v:"pass",c:"SKL-08",e:"On-site in warehouses and plants; vision systems in Lidl warehouses, logistics systems at Celonis"},
@@ -439,7 +439,7 @@ const EVALS=[
 {i:"EV-13",r:"Comfortable in an early-stage, fast-moving environment",v:"pass",c:"SKL-07",e:"Co-founder, VP Engineering at a startup, Celonis Labs, three products of my own"},
 {i:"EV-14",r:"Willingness to travel to customer sites across Europe and beyond, up to 10%",v:"pass",c:"SKL-08",e:"Yes — and already the way I have worked at HYVE and Celonis"},
 {i:"EV-15",r:"Bonus: robotics, autonomous systems, or products deployed in physical environments",v:"pass",c:"SKL-09",e:"Vision systems deployed in Lidl warehouses; ETH robotics and a shipped AR platform"},
-{i:"EV-16",r:"Bonus: reinforcement learning or imitation learning",v:"gap",c:"SKL-10",e:"Grounding only, and none of it recent. No production build, no large-scale exposure"},
+{i:"EV-16",r:"Bonus: reinforcement learning or imitation learning",v:"partial",c:"SKL-10",e:"Small RL systems built and world-model work; not large-scale distributed RL in production"},
 {i:"EV-17",r:"Bonus: foundation models for robotics",v:"partial",c:"SKL-03",e:"Eighteen months building on frontier models in production — but not in a robotics context"}
 ];
 
@@ -595,7 +595,7 @@ const VIZ=[
   g.strokeStyle=A;g.globalAlpha=.5;g.lineWidth=1.4;g.beginPath();g.arc(tx,ty,9,0,7);g.stroke();g.globalAlpha=1;},
 (g,t,A,S,M,R)=>{ /* unconverged gridworld policy */
   const C=11,Rw=4,cw=W*.86/C,ch=H*.62/Rw,x0=W*.07,y0=H*.17;
-  const known=(c,r)=>((c*5+r*3)%7)<4;
+  const known=(c,r)=>((c*5+r*3)%7)<6;
   for(let c=0;c<C;c++)for(let r=0;r<Rw;r++){
     const x=x0+c*cw,y=y0+r*ch;
     g.strokeStyle=R;g.lineWidth=1;g.globalAlpha=.55;g.strokeRect(x,y,cw-2,ch-2);g.globalAlpha=1;
@@ -608,7 +608,7 @@ const VIZ=[
   const step=Math.floor(t*1.6),ac=step%C,ar=Math.floor(step/C)%Rw;
   g.fillStyle=A;g.beginPath();g.arc(x0+ac*cw+cw/2-1,y0+ar*ch+ch/2-1,5,0,7);g.fill();
   g.fillStyle=M;g.font='10px "JetBrains Mono",monospace';
-  g.fillText("explored 57%  ·  policy incomplete",x0,H*.94);}
+  g.fillText("small-scale policy, converged  ·  not distributed training",x0,H*.94);}
 ];
 function paintOnce(t){
   if(!W)sizeCanvas();
